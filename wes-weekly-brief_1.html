@@ -486,17 +486,21 @@ async function downloadJPG() {
   try {
     const card = document.getElementById('wesCard');
     const canvas = await html2canvas(card, {
-      scale: 2,           // 2x for crisp LinkedIn quality
+      scale: 6, // Increase scale for higher resolution
       useCORS: true,
-      backgroundColor: '#111418',
+      allowTaint: true,
+      backgroundColor: '#111418', // Keep consistent with background
       logging: false,
       removeContainer: true
     });
 
+    // Optional: Check if the captured image looks correct here
+    // document.body.appendChild(canvas); // For debugging
+
     const link = document.createElement('a');
     const now = new Date();
-    const mm = String(now.getMonth()+1).padStart(2,'0');
-    const dd = String(now.getDate()).padStart(2,'0');
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
     link.download = `WES-Weekly-Brief-${now.getFullYear()}-${mm}-${dd}.jpg`;
     link.href = canvas.toDataURL('image/jpeg', 0.95);
     link.click();
@@ -507,9 +511,10 @@ async function downloadJPG() {
 
   btn.classList.remove('loading');
   btn.innerHTML = '✅ &nbsp; Downloaded! Ready for LinkedIn';
-  setTimeout(() => { btn.innerHTML = '⬇ &nbsp; Download as JPG — Monday Post Ready'; }, 3000);
+  setTimeout(() => {
+    btn.innerHTML = '⬇ &nbsp; Download as JPG — Monday Post Ready';
+  }, 3000);
 }
-
 // Init
 loadMarketData();
 </script>
